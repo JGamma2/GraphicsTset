@@ -5,7 +5,7 @@ canvas.width = window.screen.availWidth-10;
 canvas.height = window.screen.availHeight-100;
 
 //Variable setup.
-let framerate, playerXPosition, playerYPosition, playerAngle, playerSpeed, playerDeltaX, playerDeltaY;
+let framerate, playerXPosition, playerYPosition, playerAngle, playerSpeed, playerDeltaX, playerDeltaY, currentMap;
 
 //Player data.
 function draw2dPlayer() {
@@ -21,16 +21,39 @@ function draw2dPlayer() {
     ctx.stroke();
 };
 
+//Draws map for the 2d side.
+//Assumes this is a square. If it's not, unknown result.
+//Like the genius I am, the first array I pass through this is not a square. Worked perfectly tho.
+//Eventually will be phased out for full 3d, but currently required for visualization.
+function draw2dMap(mapArray) {
+    let currentRow = 0;
+    let currentBlock = 0;
+    for (let i of mapArray) {
+        for (let j of i) {
+            if (j == 1) {
+                ctx.fillStyle = "#ffffff";
+                ctx.fillRect(50*currentBlock,50*currentRow,50,50);
+            } else if (j == 0) {
+                ctx.fillStyle = "#000000";
+                ctx.fillRect(50*currentBlock,50*currentRow,50,50);
+            };
+            currentBlock++
+        };
+        currentBlock = 0;
+        currentRow++;
+    };
+};
+
 //Game map.
-const mapArray = [
-    0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,
+const mapArray1 = [
+    [1,1,1,1,1,1,1],
+    [1,1,0,0,0,0,1],
+    [1,0,0,0,0,0,1],
+    [1,0,0,0,0,0,1],
+    [1,0,0,1,0,0,1],
+    [1,0,0,1,0,0,1],
+    [1,0,0,0,0,0,1],
+    [1,1,1,1,1,1,1],
 ];
 
 //Key presses.
@@ -81,6 +104,7 @@ function init() {
     //These variables are confusing, but these are like the length of the legs of the triangle made by the player's angle.
     playerDeltaX = Math.cos(playerAngle)*playerSpeed;
     playerDeltaY = Math.sin(playerAngle)*playerSpeed;
+    currentMap = mapArray1;
     document.addEventListener("keydown", handleKeyPress);
 };
 
@@ -89,6 +113,7 @@ function displayFrame() {
     //Clears the whole thing to be redrawn.
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     //Draws the 2d portion.
+    draw2dMap(currentMap);
     draw2dPlayer();
     //Draws the 3d portion.
 
