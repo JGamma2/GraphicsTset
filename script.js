@@ -1,3 +1,6 @@
+//Preinitialization.
+//////////////////////////////////////////////////////////////////
+
 //Canvas setup.
 let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
@@ -6,6 +9,57 @@ canvas.height = window.screen.availHeight-100;
 
 //Variable setup.
 let framerate, playerXPosition, playerYPosition, playerAngle, playerSpeed, playerDeltaX, playerDeltaY, currentMap;
+
+//Game map.
+const mapArray1 = [
+    [1,1,1,1,1,1,1],
+    [1,1,0,0,0,0,1],
+    [1,0,0,0,0,0,1],
+    [1,0,0,0,0,0,1],
+    [1,0,0,1,0,0,1],
+    [1,0,0,1,0,0,1],
+    [1,0,0,0,0,0,1],
+    [1,1,1,1,1,1,1],
+];
+
+//Various functional functions.
+//////////////////////////////////////////////////////////////////
+
+//Key presses.
+function handleKeyPress(k) {
+    //Turns CCW.
+    if (k.key == "a") {
+        playerAngle += .1;
+        if (playerAngle >= 2*Math.PI) {
+            playerAngle -= 2*Math.PI;
+        } else if (playerAngle <= 2*Math.PI) {
+            playerAngle -= 2*Math.PI;
+        };
+        playerDeltaX = Math.cos(playerAngle)*playerSpeed;
+        playerDeltaY = Math.sin(playerAngle)*playerSpeed;
+    //Turns CW.
+    } else if (k.key == "d") {
+        playerAngle -= .1;
+        if (playerAngle >= 2*Math.PI) {
+            playerAngle -= 2*Math.PI;
+        } else if (playerAngle <= 2*Math.PI) {
+            playerAngle -= 2*Math.PI;
+        };
+        playerDeltaX = Math.cos(playerAngle)*playerSpeed;
+        playerDeltaY = Math.sin(playerAngle)*playerSpeed;
+    //Moves backward.
+    } else if (k.key == "s") {
+        playerXPosition -= playerDeltaX;
+        playerYPosition += playerDeltaY;
+    //Moves forward.
+    } else if (k.key == "w") {
+        playerXPosition += playerDeltaX;
+        playerYPosition -= playerDeltaY;
+    };
+};
+
+//2d Rendering.
+//////////////////////////////////////////////////////////////////
 
 //Player data.
 function draw2dPlayer() {
@@ -44,50 +98,13 @@ function draw2dMap(mapArray) {
     };
 };
 
-//Game map.
-const mapArray1 = [
-    [1,1,1,1,1,1,1],
-    [1,1,0,0,0,0,1],
-    [1,0,0,0,0,0,1],
-    [1,0,0,0,0,0,1],
-    [1,0,0,1,0,0,1],
-    [1,0,0,1,0,0,1],
-    [1,0,0,0,0,0,1],
-    [1,1,1,1,1,1,1],
-];
+//3d Rendering.
+//////////////////////////////////////////////////////////////////
 
-//Key presses.
-function handleKeyPress(k) {
-    //Turns CCW.
-    if (k.key == "a") {
-        playerAngle += .1;
-        if (playerAngle >= 2*Math.PI) {
-            playerAngle -= 2*Math.PI;
-        } else if (playerAngle <= 2*Math.PI) {
-            playerAngle -= 2*Math.PI;
-        };
-        playerDeltaX = Math.cos(playerAngle)*playerSpeed;
-        playerDeltaY = Math.sin(playerAngle)*playerSpeed;
-    //Turns CW.
-    } else if (k.key == "d") {
-        playerAngle -= .1;
-        if (playerAngle >= 2*Math.PI) {
-            playerAngle -= 2*Math.PI;
-        } else if (playerAngle <= 2*Math.PI) {
-            playerAngle -= 2*Math.PI;
-        };
-        playerDeltaX = Math.cos(playerAngle)*playerSpeed;
-        playerDeltaY = Math.sin(playerAngle)*playerSpeed;
-    //Moves backward.
-    } else if (k.key == "s") {
-        playerXPosition -= playerDeltaX;
-        playerYPosition += playerDeltaY;
-    //Moves forward.
-    } else if (k.key == "w") {
-        playerXPosition += playerDeltaX;
-        playerYPosition -= playerDeltaY;
-    };
-};
+
+
+//Main functions.
+//////////////////////////////////////////////////////////////////
 
 //Main loop.
 function main() {
@@ -108,21 +125,18 @@ function init() {
     document.addEventListener("keydown", handleKeyPress);
 };
 
-//2d and 3d renderer.
+//2d and 3d renderer. This is what get looped by main, happens every frame.
 function displayFrame() {
     //Clears the whole thing to be redrawn.
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     //Draws the 2d portion.
     draw2dMap(currentMap);
     draw2dPlayer();
+    calculateAllRays;
+    draw2dRay();
     //Draws the 3d portion.
 
 };
-
-
-/*Tester Scripts go in here.
-    //None currently.
-*/
 
 init();
 main();
