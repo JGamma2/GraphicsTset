@@ -114,8 +114,8 @@ function main() {
 //Game initialization.
 function init() {
     framerate = 60;
-    playerXPosition = 700;
-    playerYPosition = 500;
+    playerXPosition = 75;
+    playerYPosition = 75;
     playerAngle = 0; //In radians.
     playerSpeed = 200/framerate;
     //These variables are confusing, but these are like the length of the legs of the triangle made by the player's angle.
