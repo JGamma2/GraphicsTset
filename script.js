@@ -4,8 +4,8 @@
 //Canvas setup.
 let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
-canvas.width = window.screen.availWidth-10;
-canvas.height = window.screen.availHeight-100;
+canvas.width = 1200;
+canvas.height = 900;
 
 //Variable setup.
 let framerate, playerXPosition, playerYPosition, playerAngle, playerSpeed, playerDeltaX, playerDeltaY, currentMap;
@@ -65,13 +65,13 @@ function handleKeyPress(k) {
 function draw2dPlayer() {
     //Draws the player box. 
     ctx.fillStyle = "#54aab3"
-    ctx.fillRect(playerXPosition, playerYPosition, 10, 10);
+    ctx.fillRect(playerXPosition, playerYPosition, 6, 6);
     //Draws his directional line.
     ctx.beginPath();
     ctx.lineWidth = 3;
     ctx.strokeStyle = "orange";
-    ctx.moveTo(playerXPosition+5, playerYPosition+5);
-    ctx.lineTo(playerXPosition+5 + playerDeltaX*10, playerYPosition+5 - playerDeltaY*10);
+    ctx.moveTo(playerXPosition+3, playerYPosition+3);
+    ctx.lineTo(playerXPosition+3 + playerDeltaX*5, playerYPosition+3 - playerDeltaY*5);
     ctx.stroke();
 };
 
@@ -86,10 +86,10 @@ function draw2dMap(mapArray) {
         for (let j of i) {
             if (j == 1) {
                 ctx.fillStyle = "#ffffff";
-                ctx.fillRect(50*currentBlock,50*currentRow,50,50);
+                ctx.fillRect(25*currentBlock,25*currentRow,25,25);
             } else if (j == 0) {
                 ctx.fillStyle = "#000000";
-                ctx.fillRect(50*currentBlock,50*currentRow,50,50);
+                ctx.fillRect(25*currentBlock,25*currentRow,25,25);
             };
             currentBlock++
         };
@@ -129,12 +129,15 @@ function init() {
 function displayFrame() {
     //Clears the whole thing to be redrawn.
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    //Draws the 3d portion.
+    //calculateAllRays();
+    //
     //Draws the 2d portion.
     draw2dMap(currentMap);
     draw2dPlayer();
-    calculateAllRays;
-    draw2dRay();
-    //Draws the 3d portion.
+    //draw2dRays();
+    
 
 };
 
