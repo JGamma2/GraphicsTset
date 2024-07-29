@@ -55,7 +55,7 @@ function playerMove() {
     //Turns CCW.
     if (aPressed) {
         playerAngle += .05;
-        if (playerAngle <= 2*Math.PI) {
+        if (playerAngle <= 0) {
             playerAngle += 2*Math.PI;
         } else if (playerAngle >= 2*Math.PI) {
             playerAngle -= 2*Math.PI;
@@ -66,7 +66,7 @@ function playerMove() {
     //Turns CW.
     if (dPressed) {
         playerAngle -= .05;
-        if (playerAngle <= 2*Math.PI) {
+        if (playerAngle <= 0) {
             playerAngle += 2*Math.PI;
         } else if (playerAngle >= 2*Math.PI) {
             playerAngle -= 2*Math.PI;
@@ -143,7 +143,7 @@ function drawRays(mapArray) {
             mapYPosition = Math.trunc(playerYPosition / 64);
             rayXPosition =  (playerYPosition - Math.trunc(playerYPosition / 64) * 64) / Math.tan(rayAngle) + playerXPosition;
             rayYOffset = -1;
-            rayXOffset = Math.tan(rayAngle) * 64;
+            rayXOffset = 64 / Math.tan(rayAngle);
         };
 
         //Looking down.
@@ -151,7 +151,7 @@ function drawRays(mapArray) {
             mapYPosition = Math.trunc(playerYPosition / 64) + 1;
             rayXPosition = (playerYPosition - Math.trunc(playerYPosition / 64) * 64) / Math.tan(rayAngle) + playerXPosition;
             rayYOffset = 1;
-            rayXOffset = Math.tan(rayAngle) * 64;
+            rayXOffset = 64 / Math.tan(rayAngle);
         };
 
         while (depthOfField < 5) {
