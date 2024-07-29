@@ -40,7 +40,6 @@ function handleKeyPress(k) {
 };
 
 function handleKeyUp(k) {
-    
     if (k.key == "a") {
         aPressed = false;
     } else if (k.key == "d") {
@@ -56,9 +55,9 @@ function playerMove() {
     //Turns CCW.
     if (aPressed) {
         playerAngle += .05;
-        if (playerAngle >= 2*Math.PI) {
-            playerAngle -= 2*Math.PI;
-        } else if (playerAngle <= 2*Math.PI) {
+        if (playerAngle <= 2*Math.PI) {
+            playerAngle += 2*Math.PI;
+        } else if (playerAngle >= 2*Math.PI) {
             playerAngle -= 2*Math.PI;
         };
         playerDeltaX = Math.cos(playerAngle)*playerSpeed;
@@ -67,9 +66,9 @@ function playerMove() {
     //Turns CW.
     if (dPressed) {
         playerAngle -= .05;
-        if (playerAngle >= 2*Math.PI) {
-            playerAngle -= 2*Math.PI;
-        } else if (playerAngle <= 2*Math.PI) {
+        if (playerAngle <= 2*Math.PI) {
+            playerAngle += 2*Math.PI;
+        } else if (playerAngle >= 2*Math.PI) {
             playerAngle -= 2*Math.PI;
         };
         playerDeltaX = Math.cos(playerAngle)*playerSpeed;
@@ -100,7 +99,7 @@ function draw2dPlayer() {
     ctx.lineWidth = 3;
     ctx.strokeStyle = "orange";
     ctx.moveTo((playerXPosition+3)*map2dScaler, (playerYPosition+3)*map2dScaler);
-    ctx.lineTo((playerXPosition+3 + playerDeltaX*25/playerSpeed)*map2dScaler, (playerYPosition+3 - playerDeltaY*25/playerSpeed)*map2dScaler);
+    ctx.lineTo((playerXPosition+3 + playerDeltaX*64/playerSpeed)*map2dScaler, (playerYPosition+3 - playerDeltaY*64/playerSpeed)*map2dScaler);
     ctx.stroke();
 };
 
@@ -114,10 +113,10 @@ function draw2dMap(mapArray) {
         for (let j of i) {
             if (j == 1) {
                 ctx.fillStyle = "#ffffff";
-                ctx.fillRect(25*currentBlock*map2dScaler,25*currentRow*map2dScaler,25*map2dScaler,25*map2dScaler);
+                ctx.fillRect(64*currentBlock*map2dScaler,64*currentRow*map2dScaler,64*map2dScaler,64*map2dScaler);
             } else if (j == 0) {
                 ctx.fillStyle = "#000000";
-                ctx.fillRect(25*currentBlock*map2dScaler,25*currentRow*map2dScaler,25*map2dScaler,25*map2dScaler);
+                ctx.fillRect(64*currentBlock*map2dScaler,64*currentRow*map2dScaler,64*map2dScaler,64*map2dScaler);
             };
             currentBlock++
         };
@@ -129,7 +128,55 @@ function draw2dMap(mapArray) {
 //3d Rendering.
 //////////////////////////////////////////////////////////////////
 
+function drawRays(mapArray) {
 
+    let rayNumber, depthOfField, rayXPosition, rayYPosition, rayAngle, rayXOffset, rayYOffset, mapPosition, mapXPosition, mapYPosition;
+
+    rayAngle = playerAngle;
+
+    for (rayNumber=0; rayNumber < 1; rayNumber++) {
+        
+        //Check horizontal grid lines.
+        //Looking up.
+        depthOfField = 0;
+        if (rayAngle < Math.PI) {
+            mapYPosition = Math.trunc(playerYPosition / 64);
+            rayXPosition =  (playerYPosition - Math.trunc(playerYPosition / 64) * 64) / Math.tan(rayAngle) + playerXPosition;
+            rayYOffset = -1;
+            rayXOffset = Math.tan(rayAngle) * 64;
+        };
+
+        //Looking down.
+        if (rayAngle > Math.PI) {
+            mapYPosition = Math.trunc(playerYPosition / 64) + 1;
+            rayXPosition = (playerYPosition - Math.trunc(playerYPosition / 64) * 64) / Math.tan(rayAngle) + playerXPosition;
+            rayYOffset = 1;
+            rayXOffset = Math.tan(rayAngle) * 64;
+        };
+
+        while (depthOfField < 5) {
+            mapXPosition = Math.trunc(rayXPosition / 64);
+            if (mapArray[mapYPosition][mapXPosition] != undefined) {
+            if (mapArray[mapYPosition][mapXPosition] == 1) {
+                break;
+            } else {
+                depthOfField++;
+                rayXPosition += rayXOffset;
+                mapYPosition += rayYOffset;
+            };
+            } else {break;};
+        };
+
+        ctx.beginPath();
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "red";
+        ctx.moveTo((playerXPosition+3)*map2dScaler, (playerYPosition+3)*map2dScaler);
+        ctx.lineTo((playerXPosition+3 + rayXPosition)*map2dScaler, (playerYPosition+3 - mapYPosition*64)*map2dScaler);
+        ctx.stroke();
+
+    }
+
+};
 
 //Main functions.
 //////////////////////////////////////////////////////////////////
@@ -150,7 +197,7 @@ function init() {
     //These 2 variables are confusing, but these are like the length of the legs of the right triangle made by the player's angle.
     playerDeltaX = Math.cos(playerAngle)*playerSpeed;
     playerDeltaY = Math.sin(playerAngle)*playerSpeed;
-    map2dScaler = .4; //Change this to change the size of the 2d map without breaking everything else.
+    map2dScaler = .2; //Change this to change the size of the 2d map without breaking everything else.
     currentMap = mapArray1; //There's only 1 rn but I could add another and then switch between maps/levels.
     document.addEventListener("keydown", handleKeyPress);
     document.addEventListener("keyup", handleKeyUp);
@@ -162,13 +209,12 @@ function displayFrame() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     //Draws the 3d portion.
-    //calculateAllRays();
-    //
+    
     //Draws the 2d portion.
     draw2dMap(currentMap);
-    playerMove()
+    playerMove();
+    drawRays(currentMap);
     draw2dPlayer();
-    //draw2dRays();
     
 
 };
