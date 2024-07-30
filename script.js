@@ -174,7 +174,49 @@ function drawRays(mapArray) {
         ctx.lineTo((rayXPosition) * map2dScaler, ((rayAngle < Math.PI ? mapYPosition + 1 : mapYPosition) * 64) * map2dScaler);
         ctx.stroke();
 
-    }
+        /*
+        //Check vertical lines
+        //Looking right.
+        depthOfField = 0;
+        if (rayAngle > 3 * Math.PI || rayAngle < Math.PI / 2) {
+            mapXPosition = Math.trunc(playerXPosition / 64);
+            rayYPosition =  (playerXPosition - Math.trunc(playerXPosition / 64) * 64) / Math.tan(rayAngle) + playerYPosition;
+            rayXOffset = 1;
+            rayYOffset = 64 / Math.tan(rayAngle);
+        };
+
+        //Looking left.
+        if (rayAngle < 3 * Math.PI && rayAngle > Math.PI / 2) {
+            mapXPosition = Math.trunc(playerXPosition / 64) + 1;
+            rayYPosition = (playerXPosition - Math.trunc(playerXPosition / 64) * 64) / -Math.tan(rayAngle) + playerYPosition;
+            rayXOffset = -1;
+            rayYOffset = -64 / Math.tan(rayAngle);
+        };
+
+        while (depthOfField < 5) {
+            mapYPosition = Math.trunc(rayYPosition / 64);
+            if (mapArray[mapYPosition][mapXPosition] != undefined) {
+            if (mapArray[mapYPosition][mapXPosition] == 1) {
+                break;
+            } else {
+                depthOfField++;
+                rayYPosition += rayYOffset;
+                mapXPosition += rayXOffset;
+            };
+            } else {break;};
+        };
+
+        
+        ctx.beginPath();
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "red";
+        ctx.moveTo((playerXPosition + 3) * map2dScaler, (playerYPosition + 3) * map2dScaler);
+        //ctx.lineTo((rayXPosition) * map2dScaler, ((rayAngle < Math.PI ? mapYPosition + 1 : mapYPosition) * 64) * map2dScaler);
+        ctx.lineTo(((rayAngle > 3 * Math.PI || rayAngle < Math.PI / 2 ? mapXPosition + 1 : mapXPosition) * 64) * map2dScaler, (rayYPosition) * map2dScaler);
+        ctx.stroke();
+        */
+
+    };
 
 };
 
@@ -197,7 +239,7 @@ function init() {
     //These 2 variables are confusing, but these are like the length of the legs of the right triangle made by the player's angle.
     playerDeltaX = Math.cos(playerAngle)*playerSpeed;
     playerDeltaY = Math.sin(playerAngle)*playerSpeed;
-    map2dScaler = .2; //Change this to change the size of the 2d map without breaking everything else.
+    map2dScaler = .4; //Change this to change the size of the 2d map without breaking everything else.
     currentMap = mapArray1; //There's only 1 rn but I could add another and then switch between maps/levels.
     document.addEventListener("keydown", handleKeyPress);
     document.addEventListener("keyup", handleKeyUp);
