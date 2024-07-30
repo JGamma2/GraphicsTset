@@ -149,9 +149,9 @@ function drawRays(mapArray) {
         //Looking down.
         if (rayAngle > Math.PI) {
             mapYPosition = Math.trunc(playerYPosition / 64) + 1;
-            rayXPosition = (playerYPosition - Math.trunc(playerYPosition / 64) * 64) / Math.tan(rayAngle) + playerXPosition;
+            rayXPosition = (playerYPosition - Math.trunc(playerYPosition / 64) * 64) / -Math.tan(rayAngle) + playerXPosition;
             rayYOffset = 1;
-            rayXOffset = 64 / Math.tan(rayAngle);
+            rayXOffset = -64 / Math.tan(rayAngle);
         };
 
         while (depthOfField < 5) {
@@ -170,8 +170,8 @@ function drawRays(mapArray) {
         ctx.beginPath();
         ctx.lineWidth = 1;
         ctx.strokeStyle = "red";
-        ctx.moveTo((playerXPosition+3)*map2dScaler, (playerYPosition+3)*map2dScaler);
-        ctx.lineTo((playerXPosition+3 + rayXPosition)*map2dScaler, (playerYPosition+3 - mapYPosition*64)*map2dScaler);
+        ctx.moveTo((playerXPosition + 3) * map2dScaler, (playerYPosition + 3) * map2dScaler);
+        ctx.lineTo((rayXPosition) * map2dScaler, ((rayAngle < Math.PI ? mapYPosition + 1 : mapYPosition) * 64) * map2dScaler);
         ctx.stroke();
 
     }
