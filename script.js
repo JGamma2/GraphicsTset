@@ -56,33 +56,33 @@ function playerMove() {
     if (aPressed) {
         playerAngle += .05;
         if (playerAngle <= 0) {
-            playerAngle += 2*Math.PI;
-        } else if (playerAngle >= 2*Math.PI) {
-            playerAngle -= 2*Math.PI;
+            playerAngle += 2 * Math.PI;
+        } else if (playerAngle >= 2 * Math.PI) {
+            playerAngle -= 2 * Math.PI;
         };
-        playerDeltaX = Math.cos(playerAngle)*playerSpeed;
-        playerDeltaY = Math.sin(playerAngle)*playerSpeed;
+        playerDeltaX = Math.cos(playerAngle);
+        playerDeltaY = Math.sin(playerAngle);
     };
     //Turns CW.
     if (dPressed) {
         playerAngle -= .05;
         if (playerAngle <= 0) {
-            playerAngle += 2*Math.PI;
-        } else if (playerAngle >= 2*Math.PI) {
+            playerAngle += 2 * Math.PI;
+        } else if (playerAngle >= 2 * Math.PI) {
             playerAngle -= 2*Math.PI;
         };
-        playerDeltaX = Math.cos(playerAngle)*playerSpeed;
-        playerDeltaY = Math.sin(playerAngle)*playerSpeed;
+        playerDeltaX = Math.cos(playerAngle);
+        playerDeltaY = Math.sin(playerAngle);
     };
     //Moves forward.
     if (wPressed) {
-        playerXPosition += playerDeltaX;
-        playerYPosition -= playerDeltaY;
+        playerXPosition += playerDeltaX * playerSpeed;
+        playerYPosition -= playerDeltaY * playerSpeed;
     };
     //Moves backward.
     if (sPressed) {
-        playerXPosition -= playerDeltaX;
-        playerYPosition += playerDeltaY;
+        playerXPosition -= playerDeltaX * playerSpeed;
+        playerYPosition += playerDeltaY * playerSpeed;
     };
 };
 
@@ -93,13 +93,13 @@ function playerMove() {
 function draw2dPlayer() {
     //Draws the player box. 
     ctx.fillStyle = "#54aab3"
-    ctx.fillRect(playerXPosition*map2dScaler, playerYPosition*map2dScaler, 6*map2dScaler, 6*map2dScaler);
+    ctx.fillRect(playerXPosition * map2dScaler, playerYPosition * map2dScaler, 6 * map2dScaler, 6 * map2dScaler);
     //Draws his directional line.
     ctx.beginPath();
     ctx.lineWidth = 3;
     ctx.strokeStyle = "orange";
-    ctx.moveTo((playerXPosition+3)*map2dScaler, (playerYPosition+3)*map2dScaler);
-    ctx.lineTo((playerXPosition+3 + playerDeltaX*64/playerSpeed)*map2dScaler, (playerYPosition+3 - playerDeltaY*64/playerSpeed)*map2dScaler);
+    ctx.moveTo((playerXPosition + 3) * map2dScaler, (playerYPosition + 3) * map2dScaler);
+    ctx.lineTo((playerXPosition + 3 + playerDeltaX * 64) * map2dScaler, (playerYPosition + 3 - playerDeltaY * 64) * map2dScaler);
     ctx.stroke();
 };
 
@@ -137,23 +137,47 @@ function drawRays(mapArray) {
     for (rayNumber=0; rayNumber < 1; rayNumber++) {
         
         //Check horizontal grid lines.
-        //Looking up.
+        //Looking up depreciated.
+        /*
         depthOfField = 0;
         if (rayAngle < Math.PI) {
             mapYPosition = Math.trunc(playerYPosition / 64);
             rayXPosition =  (playerYPosition - Math.trunc(playerYPosition / 64) * 64) / Math.tan(rayAngle) + playerXPosition;
             rayYOffset = -1;
             rayXOffset = 64 / Math.tan(rayAngle);
-        };
+        };*/
 
-        //Looking down.
+        //Looking down depreciated.
+        /*
         if (rayAngle > Math.PI) {
             mapYPosition = Math.trunc(playerYPosition / 64) + 1;
             rayXPosition = (playerYPosition - Math.trunc(playerYPosition / 64) * 64) / -Math.tan(rayAngle) + playerXPosition;
             rayYOffset = 1;
             rayXOffset = -64 / Math.tan(rayAngle);
+        };*/
+
+        depthOfField = 0;
+        rayYPosition = rayAngle < Math.PI ? (Math.trunc(playerYPosition / 64) * 64) : (Math.trunc(playerYPosition / 64 + 1) * 64);
+        rayXPosition = rayAngle < Math.PI ? ((rayYPosition - playerYPosition) / Math.tan(rayAngle) + playerXPosition) : (-(rayYPosition - playerYPosition) / Math.tan(rayAngle) + playerXPosition);
+        rayYOffset = rayAngle < Math.PI ? -64 : 64;
+        rayXOffset =  rayAngle < Math.PI ? 64/ Math.tan(rayAngle) : -64 / Math.tan(rayAngle);
+
+        while (depthOfField < 6) {
+            mapYPosition = rayAngle < Math.PI ? Math.trunc(rayYPosition / 64 + .01) : Math.trunc(rayYPosition / 64 + .01);
+            mapXPosition = Math.trunc((rayXPosition) / 64);
+            
+            if (mapArray[mapYPosition][mapXPosition] != undefined) {
+                if (mapArray[mapYPosition][mapXPosition] == 1) {
+                    break;
+                } else {
+                    depthOfField++;
+                    rayXPosition += rayXOffset;
+                    rayYPosition += rayYOffset;
+                };
+                } else {break;};
         };
 
+        /*
         while (depthOfField < 5) {
             mapXPosition = Math.trunc(rayXPosition / 64);
             if (mapArray[mapYPosition][mapXPosition] != undefined) {
@@ -165,13 +189,13 @@ function drawRays(mapArray) {
                 mapYPosition += rayYOffset;
             };
             } else {break;};
-        };
+        };*/
 
         ctx.beginPath();
         ctx.lineWidth = 1;
         ctx.strokeStyle = "red";
         ctx.moveTo((playerXPosition + 3) * map2dScaler, (playerYPosition + 3) * map2dScaler);
-        ctx.lineTo((rayXPosition) * map2dScaler, ((rayAngle < Math.PI ? mapYPosition + 1 : mapYPosition) * 64) * map2dScaler);
+        ctx.lineTo((rayXPosition) * map2dScaler, ((rayAngle < Math.PI ? rayYPosition + 64 : rayYPosition)) * map2dScaler);
         ctx.stroke();
 
         /*
@@ -239,7 +263,7 @@ function init() {
     //These 2 variables are confusing, but these are like the length of the legs of the right triangle made by the player's angle.
     playerDeltaX = Math.cos(playerAngle)*playerSpeed;
     playerDeltaY = Math.sin(playerAngle)*playerSpeed;
-    map2dScaler = .4; //Change this to change the size of the 2d map without breaking everything else.
+    map2dScaler = 1; //Change this to change the size of the 2d map without breaking everything else.
     currentMap = mapArray1; //There's only 1 rn but I could add another and then switch between maps/levels.
     document.addEventListener("keydown", handleKeyPress);
     document.addEventListener("keyup", handleKeyUp);
