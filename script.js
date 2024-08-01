@@ -13,14 +13,22 @@ let aPressed, dPressed, sPressed, wPressed = false;
 
 //Game map.
 const mapArray1 = [
-    [1,1,1,1,1,1,1],
-    [1,1,0,0,0,0,1,1,1],
-    [1,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,1,1,1],
-    [1,0,0,1,0,0,1],
-    [1,0,0,1,0,0,1],
-    [1,0,0,0,0,0,1],
-    [1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 ];
 
 //Various functional functions.
@@ -135,32 +143,12 @@ function drawRays(mapArray) {
     rayAngle = playerAngle;
 
     for (rayNumber=0; rayNumber < 1; rayNumber++) {
-        
-        //Check horizontal grid lines.
-        //Looking up depreciated.
-        /*
-        depthOfField = 0;
-        if (rayAngle < Math.PI) {
-            mapYPosition = Math.trunc(playerYPosition / 64);
-            rayXPosition =  (playerYPosition - Math.trunc(playerYPosition / 64) * 64) / Math.tan(rayAngle) + playerXPosition;
-            rayYOffset = -1;
-            rayXOffset = 64 / Math.tan(rayAngle);
-        };*/
-
-        //Looking down depreciated.
-        /*
-        if (rayAngle > Math.PI) {
-            mapYPosition = Math.trunc(playerYPosition / 64) + 1;
-            rayXPosition = (playerYPosition - Math.trunc(playerYPosition / 64) * 64) / -Math.tan(rayAngle) + playerXPosition;
-            rayYOffset = 1;
-            rayXOffset = -64 / Math.tan(rayAngle);
-        };*/
 
         depthOfField = 0;
         rayYPosition = rayAngle < Math.PI ? (Math.trunc(playerYPosition / 64) * 64) : (Math.trunc(playerYPosition / 64 + 1) * 64);
-        rayXPosition = rayAngle < Math.PI ? ((rayYPosition - playerYPosition) / Math.tan(rayAngle) + playerXPosition) : (-(rayYPosition - playerYPosition) / Math.tan(rayAngle) + playerXPosition);
+        rayXPosition = rayAngle < Math.PI ? (playerYPosition - rayYPosition) / Math.tan(rayAngle) + playerXPosition : (playerYPosition - rayYPosition) / Math.tan(rayAngle) + playerXPosition;
         rayYOffset = rayAngle < Math.PI ? -64 : 64;
-        rayXOffset =  rayAngle < Math.PI ? 64/ Math.tan(rayAngle) : -64 / Math.tan(rayAngle);
+        rayXOffset =  rayAngle < Math.PI ? 64 / Math.tan(rayAngle) : -64 / Math.tan(rayAngle);
 
         while (depthOfField < 6) {
             mapYPosition = rayAngle < Math.PI ? Math.trunc(rayYPosition / 64 + .01) : Math.trunc(rayYPosition / 64 + .01);
@@ -175,71 +163,15 @@ function drawRays(mapArray) {
                     rayYPosition += rayYOffset;
                 };
                 } else {break;};
+                //I need to make it dump negative x values.
         };
-
-        /*
-        while (depthOfField < 5) {
-            mapXPosition = Math.trunc(rayXPosition / 64);
-            if (mapArray[mapYPosition][mapXPosition] != undefined) {
-            if (mapArray[mapYPosition][mapXPosition] == 1) {
-                break;
-            } else {
-                depthOfField++;
-                rayXPosition += rayXOffset;
-                mapYPosition += rayYOffset;
-            };
-            } else {break;};
-        };*/
 
         ctx.beginPath();
         ctx.lineWidth = 1;
         ctx.strokeStyle = "red";
         ctx.moveTo((playerXPosition + 3) * map2dScaler, (playerYPosition + 3) * map2dScaler);
-        ctx.lineTo((rayXPosition) * map2dScaler, ((rayAngle < Math.PI ? rayYPosition + 64 : rayYPosition)) * map2dScaler);
+        ctx.lineTo((rayAngle < Math.PI ? rayXPosition - rayXOffset : rayXPosition) * map2dScaler, (rayAngle < Math.PI ? rayYPosition - rayYOffset : rayYPosition) * map2dScaler);
         ctx.stroke();
-
-        /*
-        //Check vertical lines
-        //Looking right.
-        depthOfField = 0;
-        if (rayAngle > 3 * Math.PI || rayAngle < Math.PI / 2) {
-            mapXPosition = Math.trunc(playerXPosition / 64);
-            rayYPosition =  (playerXPosition - Math.trunc(playerXPosition / 64) * 64) / Math.tan(rayAngle) + playerYPosition;
-            rayXOffset = 1;
-            rayYOffset = 64 / Math.tan(rayAngle);
-        };
-
-        //Looking left.
-        if (rayAngle < 3 * Math.PI && rayAngle > Math.PI / 2) {
-            mapXPosition = Math.trunc(playerXPosition / 64) + 1;
-            rayYPosition = (playerXPosition - Math.trunc(playerXPosition / 64) * 64) / -Math.tan(rayAngle) + playerYPosition;
-            rayXOffset = -1;
-            rayYOffset = -64 / Math.tan(rayAngle);
-        };
-
-        while (depthOfField < 5) {
-            mapYPosition = Math.trunc(rayYPosition / 64);
-            if (mapArray[mapYPosition][mapXPosition] != undefined) {
-            if (mapArray[mapYPosition][mapXPosition] == 1) {
-                break;
-            } else {
-                depthOfField++;
-                rayYPosition += rayYOffset;
-                mapXPosition += rayXOffset;
-            };
-            } else {break;};
-        };
-
-        
-        ctx.beginPath();
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = "red";
-        ctx.moveTo((playerXPosition + 3) * map2dScaler, (playerYPosition + 3) * map2dScaler);
-        //ctx.lineTo((rayXPosition) * map2dScaler, ((rayAngle < Math.PI ? mapYPosition + 1 : mapYPosition) * 64) * map2dScaler);
-        ctx.lineTo(((rayAngle > 3 * Math.PI || rayAngle < Math.PI / 2 ? mapXPosition + 1 : mapXPosition) * 64) * map2dScaler, (rayYPosition) * map2dScaler);
-        ctx.stroke();
-        */
-
     };
 
 };
@@ -256,14 +188,14 @@ function main() {
 //If there's some variable that needs to be smth when everything starts, it's probably going to be here.
 function init() {
     framerate = 60;
-    playerXPosition = 75;
-    playerYPosition = 75;
+    playerXPosition = 512;
+    playerYPosition = 512;
     playerAngle = 0; //In radians.
     playerSpeed = 50/framerate;
     //These 2 variables are confusing, but these are like the length of the legs of the right triangle made by the player's angle.
     playerDeltaX = Math.cos(playerAngle)*playerSpeed;
     playerDeltaY = Math.sin(playerAngle)*playerSpeed;
-    map2dScaler = 1; //Change this to change the size of the 2d map without breaking everything else.
+    map2dScaler = .4; //Change this to change the size of the 2d map without breaking everything else.
     currentMap = mapArray1; //There's only 1 rn but I could add another and then switch between maps/levels.
     document.addEventListener("keydown", handleKeyPress);
     document.addEventListener("keyup", handleKeyUp);
