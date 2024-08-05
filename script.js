@@ -158,9 +158,9 @@ function drawRays(mapArray) {
     let rayNumber, depthOfField, rayXPositionH, rayYPositionH, rayAngle, rayXOffsetH, rayYOffsetH, mapPosition, mapXPosition, mapYPosition, takeVert, takeHori, rayXPositionV, rayYPositionV, rayXOffsetV, rayYOffsetV;
 
 
-    for (rayNumber = 0; rayNumber < 60; rayNumber++) {
+    for (rayNumber = 0; rayNumber < 120; rayNumber++) {
 
-        rayAngle = playerAngle + Math.PI / 6 - rayNumber / 180 * Math.PI;
+        rayAngle = playerAngle + Math.PI / 6 - rayNumber / 180 * Math.PI / 2;
 
         if (rayAngle > 2 * Math.PI) {
             rayAngle -= 2 * Math.PI;
