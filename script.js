@@ -13,22 +13,29 @@ let aPressed, dPressed, sPressed, wPressed = false;
 
 //Game map.
 const mapArray1 = [
-    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 ];
 
 //Various functional functions.
@@ -121,10 +128,10 @@ function draw2dMap(mapArray) {
         for (let j of i) {
             if (j == 1) {
                 ctx.fillStyle = "#ffffff";
-                ctx.fillRect(64*currentBlock*map2dScaler,64*currentRow*map2dScaler,64*map2dScaler,64*map2dScaler);
+                ctx.fillRect(64 * currentBlock * map2dScaler, 64 * currentRow * map2dScaler, 64 * map2dScaler, 64 * map2dScaler);
             } else if (j == 0) {
                 ctx.fillStyle = "#000000";
-                ctx.fillRect(64*currentBlock*map2dScaler,64*currentRow*map2dScaler,64*map2dScaler,64*map2dScaler);
+                ctx.fillRect(64 * currentBlock * map2dScaler, 64* currentRow * map2dScaler, 64 * map2dScaler, 64 * map2dScaler);
             };
             currentBlock++
         };
@@ -138,40 +145,99 @@ function draw2dMap(mapArray) {
 
 function drawRays(mapArray) {
 
-    let rayNumber, depthOfField, rayXPosition, rayYPosition, rayAngle, rayXOffset, rayYOffset, mapPosition, mapXPosition, mapYPosition;
+    let rayNumber, depthOfField, rayXPositionH, rayYPositionH, rayAngle, rayXOffsetH, rayYOffsetH, mapPosition, mapXPosition, mapYPosition, takeVert, takeHori, rayXPositionV, rayYPositionV, rayXOffsetV, rayYOffsetV;
 
     rayAngle = playerAngle;
 
-    for (rayNumber=0; rayNumber < 1; rayNumber++) {
+    for (rayNumber = 0; rayNumber < 1; rayNumber++) {
+        
+        takeHori = false;
+        takeVert = false;
 
+        //Checking horizontal grid lines.
         depthOfField = 0;
-        rayYPosition = rayAngle < Math.PI ? (Math.trunc(playerYPosition / 64) * 64) : (Math.trunc(playerYPosition / 64 + 1) * 64);
-        rayXPosition = rayAngle < Math.PI ? (playerYPosition - rayYPosition) / Math.tan(rayAngle) + playerXPosition : (playerYPosition - rayYPosition) / Math.tan(rayAngle) + playerXPosition;
-        rayYOffset = rayAngle < Math.PI ? -64 : 64;
-        rayXOffset =  rayAngle < Math.PI ? 64 / Math.tan(rayAngle) : -64 / Math.tan(rayAngle);
+        rayYPositionH = rayAngle < Math.PI ? Math.trunc(playerYPosition / 64) * 64 : (Math.trunc(playerYPosition / 64 + 1) * 64);
+        rayXPositionH = (playerYPosition - rayYPositionH) / Math.tan(rayAngle) + playerXPosition;
+        rayYOffsetH = rayAngle < Math.PI ? -64 : 64;
+        rayXOffsetH =  rayAngle < Math.PI ? 64 / Math.tan(rayAngle) : -64 / Math.tan(rayAngle);
 
-        while (depthOfField < 6) {
-            mapYPosition = rayAngle < Math.PI ? Math.trunc(rayYPosition / 64 + .01) : Math.trunc(rayYPosition / 64 + .01);
-            mapXPosition = Math.trunc((rayXPosition) / 64);
+        while (depthOfField < 12) {
+            mapYPosition = Math.trunc(rayAngle < Math.PI ? rayYPositionH / 64 - .99 : rayYPositionH / 64 + .01);
+            mapXPosition = Math.trunc(rayXPositionH / 64);
             
-            if (mapArray[mapYPosition][mapXPosition] != undefined) {
+            if (mapArray[mapYPosition][mapXPosition] != undefined && rayAngle != 0 && rayAngle != Math.PI && mapXPosition >= 0) {
                 if (mapArray[mapYPosition][mapXPosition] == 1) {
                     break;
                 } else {
                     depthOfField++;
-                    rayXPosition += rayXOffset;
-                    rayYPosition += rayYOffset;
+                    rayXPositionH += rayXOffsetH;
+                    rayYPositionH += rayYOffsetH;
                 };
-                } else {break;};
-                //I need to make it dump negative x values.
+                } else {
+                    takeHori = false;
+                    takeVert = true;
+                    break;};
+        };
+        
+        //Checking vertical grid lines.
+        try {
+        depthOfField = 0;
+        rayXPositionV = rayAngle < Math.PI / 2 || rayAngle > 3 * Math.PI / 2 ? (Math.trunc(playerXPosition / 64) + 1) * 64 : (Math.trunc(playerXPosition / 64)) * 64;
+        rayYPositionV = (playerXPosition - rayXPositionV) * Math.tan(rayAngle) + playerYPosition;
+        rayXOffsetV = rayAngle < Math.PI / 2 || rayAngle > 3 * Math.PI / 2 ? 64 : -64;
+        rayYOffsetV = rayAngle < Math.PI / 2 || rayAngle > 3 * Math.PI / 2 ? -Math.tan(rayAngle) * 64 : Math.tan(rayAngle) * 64;
+
+        while (depthOfField < 12) {
+            mapXPosition = Math.trunc(rayAngle < Math.PI / 2 || rayAngle > 3 * Math.PI / 2 ? rayXPositionV / 64 + .01 : rayXPositionV / 64 -.99);
+            mapYPosition = Math.trunc(rayYPositionV / 64);
+
+            if (mapArray[mapYPosition][mapXPosition] != undefined && rayAngle != Math.PI / 2 && rayAngle != 3 * Math.PI / 2 && mapXPosition >= 0) {
+                if (mapArray[mapYPosition][mapXPosition] == 1) {
+                    break;
+                } else {
+                    depthOfField++;
+                    rayXPositionV += rayXOffsetV;
+                    rayYPositionV += rayYOffsetV;
+                };
+                } else {
+                    takeVert = false;
+                    takeHori = true;
+                    break;};
+        }} catch {
+            takeHori = true;
         };
 
-        ctx.beginPath();
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = "red";
-        ctx.moveTo((playerXPosition + 3) * map2dScaler, (playerYPosition + 3) * map2dScaler);
-        ctx.lineTo((rayAngle < Math.PI ? rayXPosition - rayXOffset : rayXPosition) * map2dScaler, (rayAngle < Math.PI ? rayYPosition - rayYOffset : rayYPosition) * map2dScaler);
-        ctx.stroke();
+        //Deciding if it should draw the horizontal or vertical check line.
+        if (takeHori == true) {
+            takeHori = true;
+        } else if (takeVert == true) {
+            takeVert = true;
+        } else {
+            let vertDist = Math.sqrt((playerXPosition - rayXPositionV) ** 2 + (playerYPosition - rayYPositionV) ** 2);
+            let horiDist = Math.sqrt((playerXPosition - rayXPositionH) ** 2 + (playerYPosition - rayYPositionH) ** 2);
+            if (vertDist < horiDist) {
+                takeVert = true;
+            } else {
+                takeHori = true;
+            };
+        };
+
+        //Draws the line.
+        if (takeHori == true) {
+            ctx.beginPath();
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = "red";
+            ctx.moveTo((playerXPosition + 3) * map2dScaler, (playerYPosition + 3) * map2dScaler);
+            ctx.lineTo((rayAngle < Math.PI ? rayXPositionH : rayXPositionH) * map2dScaler, (rayAngle < Math.PI ? rayYPositionH : rayYPositionH) * map2dScaler);
+            ctx.stroke();
+        } else if (takeVert == true) {
+            ctx.beginPath();
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = "green";
+            ctx.moveTo((playerXPosition + 3) * map2dScaler, (playerYPosition + 3) * map2dScaler);
+            ctx.lineTo((rayAngle < Math.PI / 2 || rayAngle > 3 * Math.PI / 2 ? rayXPositionV /*- rayXOffsetV*/ : rayXPositionV) * map2dScaler, (rayAngle < Math.PI / 2 || rayAngle > 3 * Math.PI / 2 ? rayYPositionV /*- rayYOffsetV*/ : rayYPositionV) * map2dScaler);
+            ctx.stroke();
+        };
     };
 
 };
