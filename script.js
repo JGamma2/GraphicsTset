@@ -13,6 +13,16 @@ let aPressed, dPressed, sPressed, wPressed = false;
 
 //Game map.
 const mapArray1 = [
+    [1,1,1,1,1,1,1,1],
+    [1,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,1],
+    [1,1,1,1,0,0,0,1],
+    [1,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,1],
+    [1,1,1,1,1,1,1,1],
+];
+const mapArray2 = [
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -147,9 +157,16 @@ function drawRays(mapArray) {
 
     let rayNumber, depthOfField, rayXPositionH, rayYPositionH, rayAngle, rayXOffsetH, rayYOffsetH, mapPosition, mapXPosition, mapYPosition, takeVert, takeHori, rayXPositionV, rayYPositionV, rayXOffsetV, rayYOffsetV;
 
-    rayAngle = playerAngle;
 
-    for (rayNumber = 0; rayNumber < 1; rayNumber++) {
+    for (rayNumber = 0; rayNumber < 60; rayNumber++) {
+
+        rayAngle = playerAngle + Math.PI / 6 - rayNumber / 180 * Math.PI;
+
+        if (rayAngle > 2 * Math.PI) {
+            rayAngle -= 2 * Math.PI;
+        } else if (rayAngle < 0) {
+            rayAngle += 2 * Math.PI;
+        }
         
         takeHori = false;
         takeVert = false;
@@ -208,13 +225,14 @@ function drawRays(mapArray) {
         };
 
         //Deciding if it should draw the horizontal or vertical check line.
+        let vertDist = Math.sqrt((playerXPosition - rayXPositionV) ** 2 + (playerYPosition - rayYPositionV) ** 2);
+        let horiDist = Math.sqrt((playerXPosition - rayXPositionH) ** 2 + (playerYPosition - rayYPositionH) ** 2);
         if (takeHori == true) {
             takeHori = true;
         } else if (takeVert == true) {
             takeVert = true;
         } else {
-            let vertDist = Math.sqrt((playerXPosition - rayXPositionV) ** 2 + (playerYPosition - rayYPositionV) ** 2);
-            let horiDist = Math.sqrt((playerXPosition - rayXPositionH) ** 2 + (playerYPosition - rayYPositionH) ** 2);
+
             if (vertDist < horiDist) {
                 takeVert = true;
             } else {
@@ -238,8 +256,13 @@ function drawRays(mapArray) {
             ctx.lineTo((rayAngle < Math.PI / 2 || rayAngle > 3 * Math.PI / 2 ? rayXPositionV /*- rayXOffsetV*/ : rayXPositionV) * map2dScaler, (rayAngle < Math.PI / 2 || rayAngle > 3 * Math.PI / 2 ? rayYPositionV /*- rayYOffsetV*/ : rayYPositionV) * map2dScaler);
             ctx.stroke();
         };
-    };
 
+        draw3dRectangle(takeHori == true ? horiDist : vertDist, rayNumber);
+    };
+};
+
+function draw3dRectangle(distance, number) {
+    return;
 };
 
 //Main functions.
@@ -261,8 +284,8 @@ function init() {
     //These 2 variables are confusing, but these are like the length of the legs of the right triangle made by the player's angle.
     playerDeltaX = Math.cos(playerAngle)*playerSpeed;
     playerDeltaY = Math.sin(playerAngle)*playerSpeed;
-    map2dScaler = .4; //Change this to change the size of the 2d map without breaking everything else.
-    currentMap = mapArray1; //There's only 1 rn but I could add another and then switch between maps/levels.
+    map2dScaler = .5; //Change this to change the size of the 2d map without breaking everything else.
+    currentMap = mapArray2; //Change this to switch levels.
     document.addEventListener("keydown", handleKeyPress);
     document.addEventListener("keyup", handleKeyUp);
 };
