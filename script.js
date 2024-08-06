@@ -178,7 +178,7 @@ function drawRays(mapArray) {
         rayYOffsetH = rayAngle < Math.PI ? -64 : 64;
         rayXOffsetH =  rayAngle < Math.PI ? 64 / Math.tan(rayAngle) : -64 / Math.tan(rayAngle);
 
-        while (depthOfField < 12) {
+        while (depthOfField < 20) {
             mapYPosition = Math.trunc(rayAngle < Math.PI ? rayYPositionH / 64 - .99 : rayYPositionH / 64 + .01);
             mapXPosition = Math.trunc(rayXPositionH / 64);
             
@@ -204,7 +204,7 @@ function drawRays(mapArray) {
         rayXOffsetV = rayAngle < Math.PI / 2 || rayAngle > 3 * Math.PI / 2 ? 64 : -64;
         rayYOffsetV = rayAngle < Math.PI / 2 || rayAngle > 3 * Math.PI / 2 ? -Math.tan(rayAngle) * 64 : Math.tan(rayAngle) * 64;
 
-        while (depthOfField < 12) {
+        while (depthOfField < 20) {
             mapXPosition = Math.trunc(rayAngle < Math.PI / 2 || rayAngle > 3 * Math.PI / 2 ? rayXPositionV / 64 + .01 : rayXPositionV / 64 -.99);
             mapYPosition = Math.trunc(rayYPositionV / 64);
 
