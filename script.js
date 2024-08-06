@@ -253,16 +253,22 @@ function drawRays(mapArray) {
             ctx.lineWidth = 1;
             ctx.strokeStyle = "green";
             ctx.moveTo((playerXPosition + 3) * map2dScaler, (playerYPosition + 3) * map2dScaler);
-            ctx.lineTo((rayAngle < Math.PI / 2 || rayAngle > 3 * Math.PI / 2 ? rayXPositionV /*- rayXOffsetV*/ : rayXPositionV) * map2dScaler, (rayAngle < Math.PI / 2 || rayAngle > 3 * Math.PI / 2 ? rayYPositionV /*- rayYOffsetV*/ : rayYPositionV) * map2dScaler);
+            ctx.lineTo((rayAngle < Math.PI / 2 || rayAngle > 3 * Math.PI / 2 ? rayXPositionV : rayXPositionV) * map2dScaler, (rayAngle < Math.PI / 2 || rayAngle > 3 * Math.PI / 2 ? rayYPositionV /*- rayYOffsetV*/ : rayYPositionV) * map2dScaler);
             ctx.stroke();
         };
+        if (takeHori == true) {
+            draw3dRectangle(horiDist, rayNumber, rayAngle, "#122211"); 
+        } else {
+            draw3dRectangle(vertDist, rayNumber, rayAngle, "#223221");
+        }
 
-        draw3dRectangle(takeHori == true ? horiDist : vertDist, rayNumber);
     };
 };
 
-function draw3dRectangle(distance, number) {
-    return;
+function draw3dRectangle(distance, number, angle, color) {
+    let rectangleHeight = canvas.height * 64 / distance / Math.cos(playerAngle - angle);
+    ctx.fillStyle = color;
+    ctx.fillRect(number * canvas.width / 120, canvas.height / distance + canvas.height / 2, canvas.width / 120, rectangleHeight);
 };
 
 //Main functions.
@@ -284,8 +290,8 @@ function init() {
     //These 2 variables are confusing, but these are like the length of the legs of the right triangle made by the player's angle.
     playerDeltaX = Math.cos(playerAngle)*playerSpeed;
     playerDeltaY = Math.sin(playerAngle)*playerSpeed;
-    map2dScaler = .1; //Change this to change the size of the 2d map without breaking everything else.
-    currentMap = mapArray2; //Change this to switch levels.
+    map2dScaler = .4; //Change this to change the size of the 2d map without breaking everything else.
+    currentMap = mapArray1; //Change this to switch levels.
     document.addEventListener("keydown", handleKeyPress);
     document.addEventListener("keyup", handleKeyUp);
 };
