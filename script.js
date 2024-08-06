@@ -158,9 +158,9 @@ function drawRays(mapArray) {
     let rayNumber, depthOfField, rayXPositionH, rayYPositionH, rayAngle, rayXOffsetH, rayYOffsetH, mapPosition, mapXPosition, mapYPosition, takeVert, takeHori, rayXPositionV, rayYPositionV, rayXOffsetV, rayYOffsetV;
 
 
-    for (rayNumber = 0; rayNumber < 120; rayNumber++) {
+    for (rayNumber = 0; rayNumber < 240; rayNumber++) {
 
-        rayAngle = playerAngle + Math.PI / 6 - rayNumber / 180 * Math.PI / 2;
+        rayAngle = playerAngle + Math.PI / 6 - rayNumber / 180 * Math.PI / 4;
 
         if (rayAngle > 2 * Math.PI) {
             rayAngle -= 2 * Math.PI;
@@ -268,7 +268,7 @@ function drawRays(mapArray) {
 function draw3dRectangle(distance, number, angle, color) {
     let rectangleHeight = canvas.height * 64 / distance / Math.cos(playerAngle - angle);
     ctx.fillStyle = color;
-    ctx.fillRect(number * canvas.width / 120, canvas.height / distance + canvas.height / 2, canvas.width / 120, rectangleHeight);
+    ctx.fillRect(number * canvas.width / 240, canvas.height / 2 - canvas.height / distance * 16, canvas.width / 240, rectangleHeight);
 };
 
 //Main functions.
@@ -286,7 +286,7 @@ function init() {
     playerXPosition = 512;
     playerYPosition = 512;
     playerAngle = 0; //In radians.
-    playerSpeed = 50 / framerate;
+    playerSpeed = 100 / framerate;
     //These 2 variables are confusing, but these are like the length of the legs of the right triangle made by the player's angle.
     playerDeltaX = Math.cos(playerAngle)*playerSpeed;
     playerDeltaY = Math.sin(playerAngle)*playerSpeed;
