@@ -290,8 +290,8 @@ function init() {
     //These 2 variables are confusing, but these are like the length of the legs of the right triangle made by the player's angle.
     playerDeltaX = Math.cos(playerAngle)*playerSpeed;
     playerDeltaY = Math.sin(playerAngle)*playerSpeed;
-    map2dScaler = .4; //Change this to change the size of the 2d map without breaking everything else.
-    currentMap = mapArray1; //Change this to switch levels.
+    map2dScaler = .2; //Change this to change the size of the 2d map without breaking everything else.
+    currentMap = mapArray2; //Change this to switch levels.
     document.addEventListener("keydown", handleKeyPress);
     document.addEventListener("keyup", handleKeyUp);
 };
