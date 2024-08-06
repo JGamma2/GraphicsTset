@@ -41,7 +41,7 @@ const mapArray2 = [
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -179,7 +179,7 @@ function drawRays(mapArray) {
         rayXOffsetH =  rayAngle < Math.PI ? 64 / Math.tan(rayAngle) : -64 / Math.tan(rayAngle);
 
         while (depthOfField < 20) {
-            mapYPosition = Math.trunc(rayAngle < Math.PI ? rayYPositionH / 64 - .99 : rayYPositionH / 64 + .01);
+            mapYPosition = Math.trunc(rayAngle < Math.PI ? rayYPositionH / 64 - .9999 : rayYPositionH / 64 + .0001);
             mapXPosition = Math.trunc(rayXPositionH / 64);
             
             if (mapArray[mapYPosition][mapXPosition] != undefined && rayAngle != 0 && rayAngle != Math.PI && mapXPosition >= 0) {
@@ -205,7 +205,7 @@ function drawRays(mapArray) {
         rayYOffsetV = rayAngle < Math.PI / 2 || rayAngle > 3 * Math.PI / 2 ? -Math.tan(rayAngle) * 64 : Math.tan(rayAngle) * 64;
 
         while (depthOfField < 20) {
-            mapXPosition = Math.trunc(rayAngle < Math.PI / 2 || rayAngle > 3 * Math.PI / 2 ? rayXPositionV / 64 + .01 : rayXPositionV / 64 -.99);
+            mapXPosition = Math.trunc(rayAngle < Math.PI / 2 || rayAngle > 3 * Math.PI / 2 ? rayXPositionV / 64 + .0001 : rayXPositionV / 64 -.9999);
             mapYPosition = Math.trunc(rayYPositionV / 64);
 
             if (mapArray[mapYPosition][mapXPosition] != undefined && rayAngle != Math.PI / 2 && rayAngle != 3 * Math.PI / 2 && mapXPosition >= 0) {
@@ -280,11 +280,11 @@ function init() {
     playerXPosition = 512;
     playerYPosition = 512;
     playerAngle = 0; //In radians.
-    playerSpeed = 50/framerate;
+    playerSpeed = 50 / framerate;
     //These 2 variables are confusing, but these are like the length of the legs of the right triangle made by the player's angle.
     playerDeltaX = Math.cos(playerAngle)*playerSpeed;
     playerDeltaY = Math.sin(playerAngle)*playerSpeed;
-    map2dScaler = .5; //Change this to change the size of the 2d map without breaking everything else.
+    map2dScaler = .1; //Change this to change the size of the 2d map without breaking everything else.
     currentMap = mapArray2; //Change this to switch levels.
     document.addEventListener("keydown", handleKeyPress);
     document.addEventListener("keyup", handleKeyUp);
