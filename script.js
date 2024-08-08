@@ -8,7 +8,7 @@ canvas.width = 1200;
 canvas.height = 900;
 
 //Variable setup.
-let framerate, playerXPosition, playerYPosition, playerAngle, playerSpeed, playerDeltaX, playerDeltaY, currentMap, map2dScaler;
+let framerate, playerXPosition, playerYPosition, playerAngle, playerSpeed, playerDeltaX, playerDeltaY, currentMap, map2dScaler, canGoForward, canGoBackward;
 let aPressed, dPressed, sPressed, wPressed = false;
 
 //Game map.
@@ -77,6 +77,19 @@ function handleKeyUp(k) {
 };
 
 function playerMove() {
+
+    //Checks if player can go forward.
+    canGoForward = true;
+    if (currentMap[Math.trunc((playerYPosition - playerDeltaY * playerSpeed) / 64)][Math.trunc((playerXPosition + playerDeltaX * playerSpeed) / 64)] == 1) {
+        canGoForward = false;
+    };
+
+    //Checks if player can go backward.
+    canGoBackward = true;
+    if (currentMap[Math.trunc((playerYPosition + playerDeltaY * playerSpeed) / 64)][Math.trunc((playerXPosition - playerDeltaX * playerSpeed) / 64)] == 1) {
+        canGoBackward = false;
+    };
+
     //Turns CCW.
     if (aPressed) {
         playerAngle += .05;
@@ -88,6 +101,7 @@ function playerMove() {
         playerDeltaX = Math.cos(playerAngle);
         playerDeltaY = Math.sin(playerAngle);
     };
+
     //Turns CW.
     if (dPressed) {
         playerAngle -= .05;
@@ -99,13 +113,15 @@ function playerMove() {
         playerDeltaX = Math.cos(playerAngle);
         playerDeltaY = Math.sin(playerAngle);
     };
+
     //Moves forward.
-    if (wPressed) {
+    if (wPressed && canGoForward == true) {
         playerXPosition += playerDeltaX * playerSpeed;
         playerYPosition -= playerDeltaY * playerSpeed;
     };
+
     //Moves backward.
-    if (sPressed) {
+    if (sPressed && canGoBackward == true) {
         playerXPosition -= playerDeltaX * playerSpeed;
         playerYPosition += playerDeltaY * playerSpeed;
     };
@@ -155,7 +171,7 @@ function draw2dMap(mapArray) {
 
 function drawRays(mapArray) {
 
-    let rayNumber, depthOfField, rayXPositionH, rayYPositionH, rayAngle, rayXOffsetH, rayYOffsetH, mapPosition, mapXPosition, mapYPosition, takeVert, takeHori, rayXPositionV, rayYPositionV, rayXOffsetV, rayYOffsetV;
+    let rayNumber, depthOfField, rayXPositionH, rayYPositionH, rayAngle, rayXOffsetH, rayYOffsetH, mapXPosition, mapYPosition, takeVert, takeHori, rayXPositionV, rayYPositionV, rayXOffsetV, rayYOffsetV;
 
 
     for (rayNumber = 0; rayNumber < 240; rayNumber++) {
@@ -283,13 +299,13 @@ function main() {
 //If there's some variable that needs to be smth when everything starts, it's probably going to be here.
 function init() {
     framerate = 60;
-    playerXPosition = 512;
-    playerYPosition = 512;
+    playerXPosition = 100;
+    playerYPosition = 100;
     playerAngle = 0; //In radians.
     playerSpeed = 100 / framerate;
     //These 2 variables are confusing, but these are like the length of the legs of the right triangle made by the player's angle.
-    playerDeltaX = Math.cos(playerAngle)*playerSpeed;
-    playerDeltaY = Math.sin(playerAngle)*playerSpeed;
+    playerDeltaX = Math.cos(playerAngle);
+    playerDeltaY = Math.sin(playerAngle);
     map2dScaler = .2; //Change this to change the size of the 2d map without breaking everything else.
     currentMap = mapArray2; //Change this to switch levels.
     document.addEventListener("keydown", handleKeyPress);
