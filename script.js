@@ -26,24 +26,24 @@ const mapArray2 = [
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 ];
@@ -288,6 +288,7 @@ function drawRays(mapArray) {
 
         //Draws the line.
         if (takeHori == true) {
+            draw3dRectangle(horiDist, rayNumber, rayAngle, "#656521");
             ctx.beginPath();
             ctx.lineWidth = 1;
             ctx.strokeStyle = "red";
@@ -295,6 +296,7 @@ function drawRays(mapArray) {
             ctx.lineTo((rayAngle < Math.PI ? rayXPositionH : rayXPositionH) * map2dScaler, (rayAngle < Math.PI ? rayYPositionH : rayYPositionH) * map2dScaler);
             ctx.stroke();
         } else if (takeVert == true) {
+            draw3dRectangle(vertDist, rayNumber, rayAngle, "#777722");
             ctx.beginPath();
             ctx.lineWidth = 1;
             ctx.strokeStyle = "green";
@@ -302,12 +304,6 @@ function drawRays(mapArray) {
             ctx.lineTo((rayAngle < Math.PI / 2 || rayAngle > 3 * Math.PI / 2 ? rayXPositionV : rayXPositionV) * map2dScaler, (rayAngle < Math.PI / 2 || rayAngle > 3 * Math.PI / 2 ? rayYPositionV /*- rayYOffsetV*/ : rayYPositionV) * map2dScaler);
             ctx.stroke();
         };
-        if (takeHori == true) {
-            draw3dRectangle(horiDist, rayNumber, rayAngle, "#656521"); 
-        } else {
-            draw3dRectangle(vertDist, rayNumber, rayAngle, "#777722");
-        }
-
     };
 };
 
@@ -315,6 +311,11 @@ function draw3dRectangle(distance, number, angle, color) {
     let rectangleHeight = canvas.height * 64 / distance / Math.cos(playerAngle - angle);
     ctx.fillStyle = color;
     ctx.fillRect(number * canvas.width / 240, canvas.height / 2 - canvas.height / distance * 16, canvas.width / 240, rectangleHeight);
+};
+
+function drawfloor() {
+    ctx.fillStyle = "#cfcfbb"
+    ctx.fillRect(0, canvas.height / 2, canvas.width, canvas.height / 2)
 };
 
 //Main functions.
@@ -346,10 +347,7 @@ function init() {
 function displayFrame() {
     //Clears the whole thing to be redrawn.
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    //Draws the 3d portion.
-    
-    //Draws the 2d portion.
+    drawfloor();
     draw2dMap(currentMap);
     playerMove();
     drawRays(currentMap);
