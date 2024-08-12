@@ -2,13 +2,13 @@
 //////////////////////////////////////////////////////////////////
 
 //Canvas setup.
-let canvas = document.getElementById("canvas");
-let ctx = canvas.getContext("2d");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
 canvas.width = 1200;
 canvas.height = 900;
 
 //Variable setup.
-let framerate, playerXPosition, playerYPosition, playerAngle, playerSpeed, playerDeltaX, playerDeltaY, currentMap, map2dScaler, canGoForward, canGoBackward;
+let framerate, playerXPosition, playerYPosition, playerAngle, playerSpeed, playerDeltaX, playerDeltaY, currentMap, map2dScaler, canGoUp, canGoDown, canGoLeft, canGoRight;
 let aPressed, dPressed, sPressed, wPressed = false;
 
 //Game map.
@@ -37,8 +37,8 @@ const mapArray2 = [
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -53,41 +53,63 @@ const mapArray2 = [
 
 //Key presses.
 function handleKeyPress(k) {
-    if (k.key == "a") {
-        aPressed = true;
-    } else if (k.key == "d") {
-        dPressed = true;
-    } else if (k.key == "s") {
-        sPressed = true;
-    } else if (k.key == "w") {
-        wPressed = true;
+    switch (k.key) {
+        case "a":
+            aPressed = true;
+            break;
+        case "d":
+            dPressed = true;
+            break;
+        case "w":
+            wPressed = true;
+            break;
+        case "s":
+            sPressed = true;
+            break;
     };
 };
 
 function handleKeyUp(k) {
-    if (k.key == "a") {
-        aPressed = false;
-    } else if (k.key == "d") {
-        dPressed = false;
-    } else if (k.key == "s") {
-        sPressed = false;
-    } else if (k.key == "w") {
-        wPressed = false;
+    switch (k.key) {
+        case "a":
+            aPressed = false;
+            break;
+        case "d":
+            dPressed = false;
+            break;
+        case "w":
+            wPressed = false;
+            break;
+        case "s":
+            sPressed = false;
+            break;
     };
 };
 
 function playerMove() {
 
-    //Checks if player can go forward.
-    canGoForward = true;
-    if (currentMap[Math.trunc((playerYPosition - playerDeltaY * playerSpeed) / 64)][Math.trunc((playerXPosition + playerDeltaX * playerSpeed) / 64)] == 1) {
-        canGoForward = false;
+    //Checks if player can go up.
+    canGoUp = true;
+    if (currentMap[Math.trunc((playerYPosition + Math.abs(playerDeltaY) * playerSpeed) / 64)][Math.trunc((playerXPosition) / 64)] == 1) {
+        canGoUp = false;
     };
 
-    //Checks if player can go backward.
-    canGoBackward = true;
-    if (currentMap[Math.trunc((playerYPosition + playerDeltaY * playerSpeed) / 64)][Math.trunc((playerXPosition - playerDeltaX * playerSpeed) / 64)] == 1) {
-        canGoBackward = false;
+    //Checks if player can go down.
+    canGoDown = true;
+    if (currentMap[Math.trunc((playerYPosition - Math.abs(playerDeltaY) * playerSpeed) / 64)][Math.trunc((playerXPosition) / 64)] == 1) {
+        canGoDown = false;
+    };
+
+    //Checks if player can go left.
+    canGoLeft = true;
+    if (currentMap[Math.trunc((playerYPosition) / 64)][Math.trunc((playerXPosition - Math.abs(playerDeltaX) * playerSpeed) / 64)] == 1) {
+        canGoLeft = false;
+    };
+
+    //Checks if player can go left.
+    canGoRight = true;
+    if (currentMap[Math.trunc((playerYPosition) / 64)][Math.trunc((playerXPosition + Math.abs(playerDeltaX) * playerSpeed) / 64)] == 1) {
+        canGoRight = false;
     };
 
     //Turns CCW.
@@ -115,15 +137,23 @@ function playerMove() {
     };
 
     //Moves forward.
-    if (wPressed && canGoForward == true) {
-        playerXPosition += playerDeltaX * playerSpeed;
-        playerYPosition -= playerDeltaY * playerSpeed;
+    if (wPressed) {
+        if ((canGoLeft == true && playerDeltaX < 0) || (canGoRight == true && playerDeltaX > 0)) {
+            playerXPosition += playerDeltaX * playerSpeed;
+        };
+        if ((canGoUp == true && playerDeltaY < 0) || (canGoDown == true && playerDeltaY > 0)) {
+            playerYPosition -= playerDeltaY * playerSpeed;
+        };
     };
 
     //Moves backward.
-    if (sPressed && canGoBackward == true) {
-        playerXPosition -= playerDeltaX * playerSpeed;
-        playerYPosition += playerDeltaY * playerSpeed;
+    if (sPressed) {
+        if ((canGoLeft == true && playerDeltaX > 0) || (canGoRight == true && playerDeltaX < 0)) {
+            playerXPosition -= playerDeltaX * playerSpeed;
+        };
+        if ((canGoUp == true && playerDeltaY > 0) || (canGoDown == true && playerDeltaY < 0)) {
+            playerYPosition += playerDeltaY * playerSpeed;
+        };
     };
 };
 
@@ -273,9 +303,9 @@ function drawRays(mapArray) {
             ctx.stroke();
         };
         if (takeHori == true) {
-            draw3dRectangle(horiDist, rayNumber, rayAngle, "#122211"); 
+            draw3dRectangle(horiDist, rayNumber, rayAngle, "#656521"); 
         } else {
-            draw3dRectangle(vertDist, rayNumber, rayAngle, "#223221");
+            draw3dRectangle(vertDist, rayNumber, rayAngle, "#777722");
         }
 
     };
@@ -302,7 +332,7 @@ function init() {
     playerXPosition = 100;
     playerYPosition = 100;
     playerAngle = 0; //In radians.
-    playerSpeed = 100 / framerate;
+    playerSpeed = 200 / framerate;
     //These 2 variables are confusing, but these are like the length of the legs of the right triangle made by the player's angle.
     playerDeltaX = Math.cos(playerAngle);
     playerDeltaY = Math.sin(playerAngle);
